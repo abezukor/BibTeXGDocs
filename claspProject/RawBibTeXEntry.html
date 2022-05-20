@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body onload="pageLoaded()">
+    <p id="bibTeXEntryIndex" class="hiddenData"><?= bibTeXEntryIndex ?> </p>
+    <div id="fullDiv" style="margin-left: 6px; margin-right: 6px;">
+      <button onclick="google.script.run.showSidebar()">Back to Citations</button>
+      
+      <label for="bibTexArea">BibTeX Code</label>
+      <textarea id="bibTexArea" onchange="bibTexUpdated()" oninput="bibTexUpdated()">
+        <?= bibTeXCode ?>
+      </textarea>
+
+      <div id="citationPreview"></div>
+
+      <button class="action" onclick="saveEntry()">Save Entry</button>
+
+    </div>
+    <span class="hiddenData" id="styleURL"><?!= JSON.stringify(getStyleData()) ?></span>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/citation-js/0.5.7/citation.min.js" integrity="sha512-X34QHCbYBHGIPLgTL2PZY25MbDxAQ9P9OYWg326XuyBkAX/39PrI3g63Eoicg/ZT5ZUM5mwRSqSqsu6yzqJyjw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <?!= include('CommonJS'); ?>
+    <?!= include('RawBibTeXJS'); ?>
+  </body>
+</html>

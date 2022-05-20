@@ -1,0 +1,19 @@
+<script>
+  const bibtexPreview = document.getElementById("citationPreview");
+  const bibtextBox = document.getElementById("bibTexArea");
+  const index = parseInt(document.getElementById("bibTeXEntryIndex").innerHTML)
+
+  async function bibTexUpdated(){
+    bibtexPreview.innerHTML = await getBibTexRendered(bibtextBox.value);
+  }
+
+  function saveEntry(){
+
+    google.script.run.modifyRawEntry(index, bibtextBox.value);
+    google.script.run.showSidebar();
+  }
+
+  function pageLoaded(){
+    bibTexUpdated();
+  }
+</script>

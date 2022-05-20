@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+  <div id="fullDiv" class="sidebar"><!-- For side margins -->
+    <h1>BibTex GDocs</h1>
+
+    <h2>Select Style</h2>
+    <select id="styleSelection"></select>
+
+    <h2>Citations</h2>
+    <p class="secondary">Click on preview to edit.</p>
+    <div id="bibTexArea">
+    </div>
+    <div id="buttonsContainer">
+      <button class="create" onclick="createConstructedEntry()">Create Constructed BibTeX Entry</button>
+      <button class="create" onclick="createRawEntry()">Create Raw BibTeX Entry</button>
+    </div>
+    <h2>Preview</h2>
+    <div id="citationPreview"></div>
+    <button class="action" id="insertCitation" onclick="insertBibTex();">Insert Citations</button>
+  </div>
+
+  <span class="hiddenData" id="styleURL"><?!= JSON.stringify(getStyleData()) ?></span>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/citation-js/0.5.7/citation.min.js" integrity="sha512-X34QHCbYBHGIPLgTL2PZY25MbDxAQ9P9OYWg326XuyBkAX/39PrI3g63Eoicg/ZT5ZUM5mwRSqSqsu6yzqJyjw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <?!= include('CommonJS'); ?>
+  <?!= include('MainPageJS'); ?>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<style>
+  body {
+    margin: 0px 0px 0px 0px;
+  }
+
+  #fullDiv {
+      display: flex;
+      flex-flow: column;
+      height: 100vh;
+  }
+  #bibTexArea {
+    width: calc(100%-12px);
+    flex: 10; 
+    position: relative;
+    border: 2px solid LightGray;
+    resize: vertical;
+    margin-bottom: 0.25em;
+  }
+  #citationPreview {
+      flex: 10;
+      position: relative;
+      overflow-y: auto;
+  }
+  #insertCitation {
+      flex: 1;
+      position: relative;
+  }
+
+  .bibTexEntry {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid grey;
+    margin: 2px;
+    padding: 1px;
+  }
+  .hiddenData {
+    display: none;
+  }
+
+  .bibTexEntryPreview {
+    flex-grow: 1;
+    cursor: pointer;
+  }
+
+  .bibTexRemoveEntry{
+    min-width: fit-content;
+    height: auto;
+  }
+
+  #buttonsContainer {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+
+  #bibTexConstruct {
+    display: grid;
+    grid-template-columns: 3fr 9fr;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+  }
+  .field, .entryTypeSelect{
+    margin-top: inherit;
+    margin-bottom: inherit;
+  }
+
+  .field_required{
+    color: red;
+  }
+
+  button.create{
+    white-space: normal;
+    height: fit-content;
+    text-transform: none;
+    line-height: 1.35;
+  }
+
+  textarea.field{
+    max-height: 20vh;
+    height: calc(1.3em + 2*(4px));
+    overflow-y: auto;
+    resize:vertical;
+  }
+
+  h1, h2, .secondary {
+    margin-top: auto;
+    margin-bottom: auto
+  }
+
+  h2 {
+    font-size: 14px;
+    line-height: 1.5em;
+  }
+</style>

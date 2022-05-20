@@ -1,0 +1,35 @@
+<script>
+  const Cite = require('citation-js');
+  const {Cite_, plugins } = require('citation-js');
+  let cite = new Cite();
+  var opt = {
+    format: 'string'
+  }
+
+  async function getBibTexRendered(bibTexCode){
+    let bibTeXFormat = JSON.parse(document.getElementById("styleURL").innerHTML);
+    if(!bibTeXFormat){
+      let bibTexFormatErrorTag = document.createElement("p");
+      bibTexFormatErrorTag.classList.add("error")
+
+      let errorText = document.createTextNode("No Valid Style Selected");
+      bibTexFormatErrorTag.appendChild(errorText);
+
+      return bibTexFormatErrorTag.outerHTML;
+    }
+
+    let templateName = bibTeXFormat['title'];
+    
+    let response = await fetch(bibTeXFormat['href']);
+    let template = await response.text();
+
+    let config = plugins.config.get('@csl');
+    config.templates.add(templateName, template)
+
+    return cite.set(bibTexCode).format('bibliography', {
+        format: 'html',
+        template: templateName,
+        lang: 'en-US'
+    });
+  }
+</script>

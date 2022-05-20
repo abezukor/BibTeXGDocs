@@ -1,0 +1,140 @@
+<script>
+  const index = parseInt($("#bibTeXEntryIndex").html());
+
+  const DEFAULT_ENTRY_TYPE = "article";
+
+  const requiredFields = {
+    article: ["author", "title", "journal", "year"],
+    book: ["author", "title", "publisher", "year"],
+    booklet: ["title"],
+    inbook: ["author", "title", "publisher", "year"],
+    incollection: ["author", "title", "booktitle", "year"],
+    inproceedings: ["author", "title", "booktitle", "year"],
+    manual: ["title"],
+    mastersthesis: ["author", "title", "school", "year"],
+    misc: [],
+    phdthesis: ["author", "title", "school", "year"],
+    proceedings: ["title", "year"],
+    techreport: ["author", "title", "institution", "year"],
+    unpublished: ["author", "title", "note"]
+  }
+  const optionalFields = {
+    article: ["volume", "number", "pages", "month", "note", "url"],
+    book: ["volume", "number", "series", "address", "edition","month", "note", "url"],
+    booklet: ["author", "howpublished", "address", "month", "year", "note", "url"],
+    inbook: ["volume", "number", "series", "type"," address", "edition", "month", "note", "url"],
+    incollection: ["editor", "volume", "number", "series", "type", "chapter", "pages", "address", "edition", "month", "note", "url"],
+    inproceedings: ["editor", "volume", "number", "series", "pages", "address", "month", "organization", "publisher", "note", "url"],
+    manual: ["author", "organization", "address", "edition", "month", "year", "note", "url"],
+    mastersthesis: ["type", "address", "month", "note", "url"],
+    misc: ["author", "title", "howpublished", "month", "year", "note", "url"],
+    phdthesis: ["type", "address", "month", "note", "url"],
+    proceedings: ["editor", "volume", "number", "series", "address", "month", "organization", "publisher", "note", "url"],
+    techreport: ["type", "number", "address", "month", "note", "url"],
+    unpublished: ["month", "year", "url"]
+  }
+
+  async function bibTexUpdated(){
+    $("#citationPreview").empty();
+    $("#invalidError").hide();
+
+    let entryType = $( "#entryTypeSelect option:selected" )[0].value;
+    const hasField = (field) => !!$(`textarea.field_${field}`).val();
+
+    if(requiredFields[entryType].every(hasField)){
+      let bibTex = getBibTex();
+      $("#citationPreview").html(await getBibTexRendered(bibTex));
+    } else {
+      $("#invalidError").show();
+    }
+  }
+
+  function saveEntry(){
+    let entryType = $( "#entryTypeSelect option:selected" )[0].value;
+
+    let fields = {};
+
+    for(const required of requiredFields[entryType]){
+      let fieldValue = $(`textarea.field_${required}`).val();
+      if(fieldValue){
+        fields[required] = fieldValue;
+      }
+    }
+    for(const optional of optionalFields[entryType]){
+      let fieldValue = $(`textarea.field_${optional}`).val();
+      if(fieldValue){
+        fields[optional] = fieldValue;
+      }
+    }
+    console.log(index, entryType, fields);
+
+    google.script.run.modifyConstructedEntry(index, entryType, fields);
+
+
+    google.script.run.showSidebar();
+  }
+
+  function entryTypeUpdate(){
+    let entryType = $( "#entryTypeSelect option:selected" )[0].value;
+    $('.field').hide();
+
+
+    for(const required of requiredFields[entryType]){
+      $(`.field_${required}`).show();
+    }
+    for(const optional of optionalFields[entryType]){
+      $(`.field_${optional}`).show();
+      $(`.field_required.field_${optional}`).hide();
+    }
+
+  }
+
+  function getBibTex(){
+    let entryType = $( "#entryTypeSelect option:selected" )[0].value;
+
+    let fieldsBibTex = "";
+
+    for(const required of requiredFields[entryType]){
+      let fieldValue = $(`textarea.field_${required}`).val();
+      if(fieldValue){
+        fieldsBibTex += `${required} = {${fieldValue}}, \n`;
+      }
+    }
+    for(const optional of optionalFields[entryType]){
+      let fieldValue = $(`textarea.field_${optional}`).val();
+      if(fieldValue){
+        fieldsBibTex += `${optional} = {${fieldValue}}, \n`;
+      }
+    }
+
+    let bibTexString = `@${entryType}{index,\n${fieldsBibTex}}`;
+    return bibTexString;
+
+  }
+
+  $(document).ready( function() {
+    $('.field').hide();
+
+    let retreivedEntryType = $("#entryType").html();
+    console.log(`Setting Entry Type to ${retreivedEntryType}`);
+    if(requiredFields[retreivedEntryType] != undefined){
+      $("#entryTypeSelect").val(retreivedEntryType).change();
+    } else{
+      $("#entryTypeSelect").val(DEFAULT_ENTRY_TYPE).change();
+      console.log(`Defaulting to ${DEFAULT_ENTRY_TYPE}`);
+    }
+    entryTypeUpdate();
+
+    $('textarea.field').on('input', function(event) {
+      bibTexUpdated();
+    });
+
+    let initialFieldValues = JSON.parse($('#fieldValues').html());
+
+    for (const [key, value] of Object.entries(initialFieldValues)) {
+      $(`textarea.field_${key}`).val(value)
+    }
+    bibTexUpdated();
+
+  });
+</script>

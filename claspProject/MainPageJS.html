@@ -1,0 +1,124 @@
+<script>
+  let DEFAULT_STYLE_ID = 470;
+
+  async function updateEntryList(entries){
+    let entriesArea = $("#bibTexArea");
+
+    entriesArea.empty();
+    let i = 0;
+    for(const entry of entries){
+      let bibTexCode = entry["computedBibTeX"];
+
+      let entryDiv = $("<div class=\"bibTexEntry\"> </div>");
+
+      let entryPreview = $(`<div class=\"bibTexEntryPreview\"> ${await getBibTexRendered(bibTexCode)}</div>`);
+      entryPreview.on('click', function(event){
+        let index = $(this).parent().find(".bibTeXEntryIndex").html();
+        console.log(`Switching to entry ${index}`)
+        google.script.run.goToEntry(index);
+      });
+      entryDiv.append(entryPreview);
+
+      let entryCode = $(`<span class=\"hiddenData bibTexEntryCode\"> ${bibTexCode}</span>`);
+      entryDiv.append(entryCode);
+
+      let entryID = $(`<span class=\"hiddenData bibTeXEntryIndex\">${i}</span>`);
+      entryDiv.append(entryID);
+
+      let entryRemoveButton = $("<button class=\"bibTexRemoveEntry\">🗑️</button>");
+      entryRemoveButton.on('click', function(event){
+        let index = $(this).parent().find(".bibTeXEntryIndex").html();
+        google.script.run.removeEntry(index);
+        google.script.run.withSuccessHandler(updateEntryList).getCitationsWithBibTex();
+      });
+      entryDiv.append(entryRemoveButton);
+
+
+      entriesArea.append(entryDiv);
+      i++;
+    }
+    updatePreview();
+  }
+
+  function getAllBibTex(){
+    let allBibTex = "";
+    $(".bibTexEntry").each(function(){
+      allBibTex += $(this).find(".bibTexEntryCode").text();
+    });
+
+    return allBibTex;
+  }
+  async function updatePreview(){
+    let bibTex = getAllBibTex();
+    let preview = await getBibTexRendered(bibTex);
+    $("#citationPreview").html(preview);
+  }
+
+  function createRawEntry(){
+    google.script.run.createRawEntry();
+  }
+    function createConstructedEntry(){
+    google.script.run.createConstructedEntry();
+  }
+  function insertBibTex(){
+    let bibTex = getAllBibTex();
+    let ciatationHTMLOutput = cite.set(bibTex).format('bibliography', {
+        format: 'html',
+        template: 'mla'
+    });
+    let citationTextOutput = cite.set(bibTex).format('bibliography');
+    google.script.run.insertCitation(ciatationHTMLOutput,citationTextOutput);
+  }
+
+  function setupStyleSelect(){
+    function polpulateStyleSelect(selectedStyle, styles){
+      let stylesFormatted = $.map(styles, function (obj, index) {
+        obj.id = obj.id || index;
+        obj.text = obj.text || obj.title;
+        
+        if(obj.id==selectedStyle['id']){
+          obj.selected = true;
+        }
+
+        return obj;
+      });
+      console.log(stylesFormatted);
+
+      $("#styleSelection").select2({
+          data: stylesFormatted                   
+      });
+
+      $('#styleSelection').on('select2:select', function (e) {
+          let data = e.params.data;
+          console.log(data);
+          $("#styleURL").html(JSON.stringify(data));
+          console.log("Set Style");
+          google.script.run.withSuccessHandler(updateEntryList).getCitationsWithBibTex();
+          console.log("Updated List");
+          google.script.run.setStyle(JSON.stringify(data));
+      });
+    }
+
+    function setupStyle(selectedStyle){
+      if(!selectedStyle){
+        selectedStyle = {
+          'id': DEFAULT_STYLE_ID
+        }
+      }
+      console.log(selectedStyle);
+      fetch("https://www.zotero.org/styles-files/styles.json")
+        .then(response => response.json())
+        .then(data => polpulateStyleSelect(selectedStyle, data));
+    }
+
+    google.script.run.withSuccessHandler(setupStyle).getStyleData();
+  }
+
+
+  $(document).ready( function() {
+    setupStyleSelect();
+        
+    google.script.run.withSuccessHandler(updateEntryList).getCitationsWithBibTex();
+  });
+  
+</script>

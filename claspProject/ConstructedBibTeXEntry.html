@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+    <p id="bibTeXEntryIndex" class="hiddenData"><?= bibTeXEntryIndex ?> </p>
+    <p id="fieldValues" class="hiddenData"> <?= bibTeXEntryFields ?> </p>
+    <p id="entryType" class="hiddenData"> <?= bibTeXEntryType ?> </p>
+
+    <div id="fullDiv" class="sidebar">
+      <button onclick="google.script.run.showSidebar()">Back to Citations</button>
+
+      <div id="bibTexConstruct">
+        <label class= "entryTypeSelect" for="entryTypeSelect">Entry Type</label>
+        <select class= "entryTypeSelect" id="entryTypeSelect" onchange="entryTypeUpdate()">
+          <option value="article" selected>Article</option>
+          <option value="book">Book</option>
+          <option value="booklet">Booklet</option>
+          <option value="inproceedings">Conference/ In Proceedings</option>
+          <option value="inbook">In Book</option>
+          <option value="incollection">In Collection</option>
+          <option value="manual">Manual</option>
+          <option value="mastersthesis">Masters Thesis</option>
+          <option value="misc">Misc</option>
+          <option value="phdthesis">PhD Thesis</option>
+          <option value="proceedings">Proceedings</option>
+          <option value="techreport">Tech Report</option>
+          <option value="unpublished">Unpublished</option>
+        </select>
+
+        <label class="field field_address" for="address">Address<span class="field field_address field_required">*</span></label>
+        <textarea  class="field field_address"  id="address" name="address"></textarea>
+
+        <label class="field field_annote" for="annote">Annote<span class="field field_annote field_required">*</span></label>
+        <textarea  class="field field_annote"  id="annote" name="annote"></textarea>
+
+        <label class="field field_author" for="author">Author<span class="field field_author field_required">*</span></label>
+        <textarea  class="field field_author" id="author" name="author"></textarea>
+
+        <label class="field field_booktitle" for="booktitle">Book Title<span class="field field_booktitle field_required">*</span></label>
+        <textarea  class="field field_booktitle" id="booktitle" name="booktitle"></textarea>
+
+        <label class="field field_chapter" for="chapter">Chapter<span class="field field_chapter field_required">*</span></label>
+        <textarea  class="field field_chapter" id="chapter" name="chapter"></textarea>
+
+        <label class="field field_crossref" for="crossref">Crossref<span class="field field_crossref field_required">*</span></label>
+        <textarea  class="field field_crossref" id="crossref" name="crossref"></textarea>
+
+        <label class="field field_edition" for="edition">Edition<span class="field field_edition field_required">*</span></label>
+        <textarea  class="field field_edition" id="edition" name="edition"></textarea>
+
+        <label class="field field_editor" for="editor">Editor<span class="field field_editor field_required">*</span></label>
+        <textarea  class="field field_editor" id="editor" name="editor"></textarea>
+
+        <label class="field field_howpublished" for="howpublished">How Published<span class="field field_howpublished field_required">*</span></label>
+        <textarea  class="field field_howpublished" id="howpublished" name="howpublished"></textarea>
+
+        <label class="field field_institution" for="institution">Institution<span class="field field_institution field_required">*</span></label>
+        <textarea  class="field field_institution" id="institution" name="institution"></textarea>
+
+        <label class="field field_journal" for="journal">Journal<span class="field field_journal field_required">*</span></label>
+        <textarea  class="field field_journal" id="journal" name="journal"></textarea>
+
+        <label class="field field_key" for="key">Key<span class="field field_key field_required">*</span></label>
+        <textarea  class="field field_key" id="key" name="key"></textarea>
+
+        <label class="field field_month" for="month">Month<span class="field field_month field_required">*</span></label>
+        <textarea  class="field field_month" id="month" name="month"></textarea>
+
+        <label class="field field_note" for="note">Note<span class="field field_note field_required">*</span></label>
+        <textarea  class="field field_note" id="note" name="note"></textarea>
+
+        <label class="field field_number" for="number">Number<span class="field field_number field_required">*</span></label>
+        <textarea  class="field field_number" id="number" name="number"></textarea>
+
+        <label class="field field_organization" for="organization">Organization<span class="field field_organization field_required">*</span></label>
+        <textarea  class="field field_organization" id="organization" name="organization">
+
+        <label class="field field_pages" for="pages">Pages<span class="field field_pages field_required">*</span></label>
+        <textarea  class="field field_pages" id="pages" name="pages"></textarea>
+
+        <label class="field field_publisher" for="publisher">Publisher<span class="field field_publisher field_required">*</span></label>
+        <textarea  class="field field_publisher" id="publisher" name="publisher">
+
+        <label class="field field_school" for="school">School<span class="field field_school field_required">*</span></label>
+        <textarea  class="field field_school" id="school" name="school"></textarea>
+
+        <label class="field field_series" for="series">Series<span class="field field_series field_required">*</span></label>
+        <textarea  class="field field_series"  id="series" name="series"></textarea>
+
+        <label class="field field_title" for="title">Title<span class="field field_title field_required">*</span></label>
+        <textarea  class="field field_title" id="title" name="title"></textarea>
+
+        <label class="field field_type" for="type">Type<span class="field field_type field_required">*</span></label>
+        <textarea  class="field field_type" id="type" name="type"></textarea>
+
+        <label class="field field_url" for="url">URL<span class="field field_url field_required">*</span></label>
+        <textarea  class="field field_url" id="url" name="url"></textarea>
+
+        <label class="field field_volume" for="volume">Volume<span class="field field_volume field_required">*</span></label>
+        <textarea  class="field field_volume" id="volume" name="volume"></textarea>
+
+        <label class="field field_year" for="year">Year<span class="field field_year field_required">*</span></label>
+        <textarea  class="field field_year" id="year" name="year"></textarea>
+
+      </div>
+
+      <p id="invalidError" class="error">Invalid BibTeX Entry. Make sure to fill in all required fields. Required fields are marked by red Asterisk (
+        <span class="field_required">*</span>).
+      </p>
+
+      <div id="citationPreview"></div>
+
+      <button class="action" onclick="saveEntry()">Save Entry</button>
+
+    </div>
+
+    <span class="hiddenData" id="styleURL"><?!= JSON.stringify(getStyleData()) ?></span>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/citation-js/0.5.7/citation.min.js" integrity="sha512-X34QHCbYBHGIPLgTL2PZY25MbDxAQ9P9OYWg326XuyBkAX/39PrI3g63Eoicg/ZT5ZUM5mwRSqSqsu6yzqJyjw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <?!= include('CommonJS'); ?>
+    <?!= include('ConstructedBibTeXJS'); ?>
+  </body>
+</html>
