@@ -33,7 +33,7 @@ class RawBibTeXEntry extends BibTeXEntry {
     template.bibTeXEntryIndex = index;
     template.bibTeXCode = this.bibTeX;
 
-    return template.evaluate().setTitle('BibTeX Gdocs - Edit Raw Entry');
+    return template.evaluate().setTitle('BibTeX For Docs - Edit Raw Entry');
   }
 
 }
@@ -102,7 +102,7 @@ class ConstructedBibTexEntry extends BibTeXEntry {
     template.bibTeXEntryFields = JSON.stringify(this.fields);
     template.bibTeXEntryType = this.entry;
 
-    return template.evaluate().setTitle('BibTeX Gdocs - Edit Constructed Entry');
+    return template.evaluate().setTitle('BibTeX For Docs - Edit Constructed Entry');
   }
 }
 

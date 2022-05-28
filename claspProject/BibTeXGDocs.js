@@ -45,7 +45,7 @@ function onInstall(e) {
  */
 function showSidebar() {
   const ui = HtmlService.createTemplateFromFile('sidebar')
-    .evaluate().setTitle('BibTeX Gdocs - Citation List');
+    .evaluate().setTitle('BibTeX For Docs - Citation List');
   DocumentApp.getUi().showSidebar(ui);
 }
 

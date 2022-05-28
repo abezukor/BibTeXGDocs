@@ -60,12 +60,9 @@
     function createConstructedEntry(){
     google.script.run.createConstructedEntry();
   }
-  function insertBibTex(){
+  async function insertBibTex(){
     let bibTex = getAllBibTex();
-    let ciatationHTMLOutput = cite.set(bibTex).format('bibliography', {
-        format: 'html',
-        template: 'mla'
-    });
+    let preview = await getBibTexRendered(bibTex);
     let citationTextOutput = cite.set(bibTex).format('bibliography');
     google.script.run.insertCitation(ciatationHTMLOutput,citationTextOutput);
   }
